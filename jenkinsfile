@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKERFILE_PATH = 'path/to/your/Dockerfile'
+        DOCKER_IMAGE_NAME = 'your-dockerhub-username/your-image-name'
+        DOCKER_HUB_CREDENTIALS = 'your-docker-hub-credentials-id'
+    }
+
+    stages {
+        stage('Build Docker Image') {
+            steps {
+                // Checkout the Dockerfile and any other necessary files from your repository
+                git credentialsId: 'your-github-credentials', url: 'https://github.com/your-username/your-repo.git'
+                
+                // Build the Docker image
+                script {
+                    docker.build("${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}", "-f ${DOCKERFILE_PATH} .")
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                // Log in to Docker Hub using the provided credentials
+                script {
+                    docker.withRegistry('', "${DOCKER_HUB_CREDENTIALS}") {
+                        // Push the built image to Docker Hub
+                        docker.image("${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}").push()
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up - remove the built Docker image locally
+            script {
+                docker.image("${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}").remove(force: true)
+            }
+        }
+    }
+}
