@@ -2,16 +2,16 @@ pipeline {
     agent any
 
     environment {
-        DOCKERFILE_PATH = 'path/to/your/Dockerfile'
-        DOCKER_IMAGE_NAME = 'your-dockerhub-username/your-image-name'
-        DOCKER_HUB_CREDENTIALS = 'your-docker-hub-credentials-id'
+        DOCKERFILE_PATH = 'path/to/your/Dockerfile' //Enter you Dockerfile path
+        DOCKER_IMAGE_NAME = 'your-dockerhub-username/your-image-name' //replce it with your Docker username 
+        DOCKER_HUB_CREDENTIALS = 'your-docker-hub-credentials-id'  //Jenkins Global credential name for docker
     }
 
     stages {
         stage('Git Checkout') {
             steps {
                 // Checkout the Dockerfile and any other necessary files from your repository
-                git branch: 'main' , credentialsId: 'your-github-credentials', url: 'https://github.com/your-username/your-repo.git'
+                git branch: 'main' , credentialsId: 'your-github-credentials', url: 'https://github.com/Shahid199578/dockerimagewithjenkins.git'
             }
         }
         stage('Build Docker Image') {
