@@ -11,7 +11,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 // Checkout the Dockerfile and any other necessary files from your repository
-                git credentialsId: 'your-github-credentials', url: 'https://github.com/your-username/your-repo.git'
+                git branch: 'main' , credentialsId: 'your-github-credentials', url: 'https://github.com/your-username/your-repo.git'
                 
                 // Build the Docker image
                 script {
