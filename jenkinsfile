@@ -8,11 +8,14 @@ pipeline {
     }
 
     stages {
-        stage('Build Docker Image') {
+        stage('Git Checkout') {
             steps {
                 // Checkout the Dockerfile and any other necessary files from your repository
                 git branch: 'main' , credentialsId: 'your-github-credentials', url: 'https://github.com/your-username/your-repo.git'
-                
+            }
+        }
+        stage('Git Checkout') {
+            steps {        
                 // Build the Docker image
                 script {
                     docker.build("${DOCKER_IMAGE_NAME}:${BUILD_NUMBER}", "-f ${DOCKERFILE_PATH} .")
